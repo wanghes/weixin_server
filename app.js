@@ -98,7 +98,8 @@ app.get("/oauth", (req, res) => {
 });
 
 app.get('/setMenus', (req, res) => {
-    jssdk.setMenus();
+    var result = jssdk.setMenus();
+    res.send(result);
 });
 
 

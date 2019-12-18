@@ -3,6 +3,7 @@
 let fs = require("fs");
 let https = require('https');
 let crypto = require('crypto');
+let request = require('../util/https')
 
 class Jsapi {
 
@@ -10,7 +11,6 @@ class Jsapi {
         this.appId = appId;
         this.appSecret = appSecret;
     }
-
 
     //生成16位随机字符串
     _createNonceStr(length = 16) {
@@ -368,12 +368,9 @@ class Jsapi {
             }]
         };
 
-        https.post(url, data, function (res) {
-            res.setEncoding('utf8');
-            res.on('data', function (data) {
-                console.log(data);
-            }
-        });
+        var result = await request.requestPost(url, data)
+
+        return result;
     }
 
 
