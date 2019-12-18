@@ -239,25 +239,32 @@ class Jsapi {
                         if (err) {
                             return reject(err);
                         }
-                        console.log(data);
-                        data = JSON.parse(data);
+                        
+                        try{
+                            data = JSON.parse(data);
+                            if (data && data.expire_time) {
 
-                        if (data && data.expire_time) {
+                                if (data.expire_time < new Date().getTime()) {
 
-                            if (data.expire_time < new Date().getTime()) {
+                                    try {
+                                        jsapi_ticket = await that._setJsApiTicket(filename);
+                                    } catch (err) {
+                                        reject(err);
+                                    }
+
+                                } else {
+                                    jsapi_ticket = data.jsapi_ticket;
+                                }
+
+                            } else {
 
                                 try {
                                     jsapi_ticket = await that._setJsApiTicket(filename);
                                 } catch (err) {
                                     reject(err);
                                 }
-
-                            } else {
-                                jsapi_ticket = data.jsapi_ticket;
                             }
-
-                        } else {
-
+                        } catch (err) {
                             try {
                                 jsapi_ticket = await that._setJsApiTicket(filename);
                             } catch (err) {
