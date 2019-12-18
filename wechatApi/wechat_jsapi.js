@@ -239,7 +239,7 @@ class Jsapi {
                         if (err) {
                             return reject(err);
                         }
-
+                        console.log(data);
                         data = JSON.parse(data);
 
                         if (data && data.expire_time) {
