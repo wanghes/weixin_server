@@ -316,7 +316,7 @@ class Jsapi {
         let access_token;
 
         try {
-            access_token = await that.getAccessToken();
+            access_token = await this.getAccessToken();
         } catch (err) {
             return err;
         }
