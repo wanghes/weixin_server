@@ -95,7 +95,11 @@ app.get("/oauth", (req, res) => {
             res.send(result)
         })
     })
-})
+});
+
+app.get('/setMenus', (req, res) => {
+    jssdk.setMenus();
+});
 
 
 //监听3000端口
