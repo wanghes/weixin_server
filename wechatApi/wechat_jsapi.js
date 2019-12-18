@@ -368,6 +368,7 @@ class Jsapi {
             }]
         };
 
+        data = JSON.stringify(data);
         var result = await request.requestPost(url, data)
 
         return result;
