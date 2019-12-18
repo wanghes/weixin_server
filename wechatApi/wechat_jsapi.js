@@ -109,22 +109,28 @@ class Jsapi {
                         if (err) {
                             return reject(err);
                         }
+                        try {
+                            data = JSON.parse(data);
+                            if (data && data.expire_time) {
 
-                        data = JSON.parse(data);
+                                if (data.expire_time < new Date().getTime()) {
+                                    try {
+                                        access_token = await that._setAccessToken(filename);
+                                    } catch (err) {
+                                        return reject(err);
+                                    }
+                                } else {
+                                    access_token = data.access_token;
+                                }
 
-                        if (data && data.expire_time) {
-
-                            if (data.expire_time < new Date().getTime()) {
+                            } else {
                                 try {
                                     access_token = await that._setAccessToken(filename);
                                 } catch (err) {
                                     return reject(err);
                                 }
-                            } else {
-                                access_token = data.access_token;
                             }
-
-                        } else {
+                        } catch (err) {
                             try {
                                 access_token = await that._setAccessToken(filename);
                             } catch (err) {
