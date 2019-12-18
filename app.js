@@ -63,11 +63,14 @@ app.get('/jssdk', function (req, res) {
     let url = req.query.url;
     //使用签名算法计算出signature
     jssdk.getSignPackage(url).then(
-        re => res.send({
-            "code": 0,
-            "message": "ok",
-            "data": re
-        })
+        re => {
+            console.log(re)
+            return res.send({
+                "code": 0,
+                "message": "ok",
+                "data": re
+            })
+        }
     ).catch(err => res.send({
         "code": 1,
         "message": "err",
