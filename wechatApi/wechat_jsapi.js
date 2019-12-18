@@ -77,9 +77,7 @@ class Jsapi {
 
     //获取access_token
     getAccessToken() {
-
         let that = this;
-
         return new Promise(function (resolve, reject) {
 
             let filename = 'access_token.json';
@@ -287,7 +285,6 @@ class Jsapi {
 
     //获取
     async getSignPackage(url) {
-
         let jsapiTicket;
 
         try {
@@ -312,10 +309,73 @@ class Jsapi {
             "timestamp": timestamp,
             "signature": signature
         };
-
         return signPackage;
-
     }
+
+    async setMenus() {
+        let access_token;
+
+        try {
+            access_token = await that.getAccessToken();
+        } catch (err) {
+            return reject(err);
+        }
+        let url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${access_token}`;
+        var data = {
+            'button':[
+             {    
+                'type':'click',
+                'name':'最新',
+                'key':'V1001_TODAY_MUSIC'
+             },
+             {
+                'name':'类别',
+                'sub_button':[
+                {    
+                     'type':'click',
+                  'name':'科幻',
+                  'key':'V1001_TYPE_KEHUAN'
+                },
+                {
+                  'type':'click',
+                  'name':'悬疑',
+                  'key':'V1001_TYPE_KXUANYI'
+                },
+                {
+                  'type':'click',
+                  'name':'爱情',
+                  'key':'V1001_TYPE_AIQING'
+                },
+                {
+                  'type':'click',
+                  'name':'教育',
+                  'key':'V1001_TYPE_JIAOYU'
+                }]
+                 },
+                 {
+                'name':'地域',
+                'sub_button':[
+                {    
+                     'type':'click',
+                  'name':'大陆',
+                  'key':'V1001_AREA_DALU'
+                },
+                {
+                  'type':'click',
+                  'name':'欧美',
+                  'key':'V1001_AREA_OUMEI'
+                }]
+            }]
+        };
+
+        https.post(url, data, function (res) {
+            res.setEncoding('utf8');
+            res.on('data', function (data) {
+                console.log(data);
+            }
+        });
+    }
+
 
 }
 
