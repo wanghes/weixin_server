@@ -1,5 +1,6 @@
 'use strict' //设置为严格模式
 let https = require('https');
+let urlUtils = require('url');
 
 /**
  * 用于处理 https Get请求方法
@@ -34,7 +35,7 @@ function requestGet(url) {
 function requestPost(url, data) {
     return new Promise(function (resolve, reject) {
         //解析 url 地址
-        var urlData = urltil.parse(url);
+        var urlData = urlUtils.parse(url);
         //设置 https.request  options 传入的参数对象
         var options = {
             //目标主机地址
