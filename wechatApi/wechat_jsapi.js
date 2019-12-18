@@ -318,7 +318,7 @@ class Jsapi {
         try {
             access_token = await that.getAccessToken();
         } catch (err) {
-            return reject(err);
+            return err;
         }
         let url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${access_token}`;
         var data = {

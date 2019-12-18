@@ -99,6 +99,12 @@ app.get("/oauth", (req, res) => {
 
 app.get('/setMenus', (req, res) => {
     var result = jssdk.setMenus();
+    result.then(function(data){
+        console.log(data);
+    }, function(err){
+        console.log(err);
+    });
+    
     res.send(result);
 });
 
