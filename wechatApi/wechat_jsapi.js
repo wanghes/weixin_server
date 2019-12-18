@@ -330,20 +330,17 @@ class Jsapi {
                 "url":"http://www.soso.com/"
              },
              {    
-                'type':'click',
+                'type':'view',
                 'name':'帮你寻车',
                 'key':'V1001_HELP_YOU_FIND_CAR',
                 "url":"http://www.soso.com/"
-             }
-            ]
+             }]
         };
 
         data = JSON.stringify(data);
         var result = await request.requestPost(url, data)
-
         return result;
     }
-
 
 }
 
