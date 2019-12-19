@@ -3,11 +3,10 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport"
-		content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-	<title></title>
-	<script src="http://www.jq22.com/jquery/jquery-1.9.1.js"></script>
-	<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>测试微信jssdk功能</title>
+	<script src="/wxJssdk/public/js/jquery.min.js"></script>
+	<script src="/wxJssdk/public/js/jweixin-1.4.0.js"></script>
 </head>
 
 <body>
@@ -37,8 +36,8 @@
 					var shareData = {
 						title: "123",
 						desc: "123456",
-						link: "",
-						imgUrl: ""
+						link: "https://www.baidu.com/",
+						imgUrl: "http://admin.mousecloud.cn/upload/2018-02/big/big_3da3cf2687be88b62e4dc19a7058f6b2_e4d494ecc100da8c2715b5cebb228b70_3f50bbff80dfd97cec8501bfbba19620_haisong.jpg"
 					};
 					wx.onMenuShareAppMessage(shareData);
 					wx.onMenuShareTimeline(shareData);

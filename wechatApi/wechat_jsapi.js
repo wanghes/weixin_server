@@ -6,7 +6,6 @@ let crypto = require('crypto');
 let request = require('../util/https')
 
 class Jsapi {
-
     constructor(appId, appSecret) {
         this.appId = appId;
         this.appSecret = appSecret;
@@ -24,17 +23,13 @@ class Jsapi {
 
     // access_token 应该全局存储与更新，这里写入到文件中
     _setAccessToken(filename) {
-
         return new Promise((resolve, reject) => {
             let url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${this.appId}&secret=${this.appSecret}`;
-
             //向微信服务器发送请求
             https.get(url, function (res) {
                 res.setEncoding('utf8');
                 res.on('data', function (data) {
-
                     if (data) {
-
                         data = JSON.parse(data);
 
                         //如果微信返回错误
@@ -63,52 +58,42 @@ class Jsapi {
                         });
 
                     } else {
-                        return reject(new Error("getAccessToken 请求返回数据为空"));
+                        return reject(new Error("getAccessToken xxwxw"));
                     }
 
                 });
             }).on("error", function (err) {
                 return resolve(err);
             });
-
-        })
-
+        });
     }
 
     //获取access_token
     getAccessToken() {
         let that = this;
         return new Promise(function (resolve, reject) {
-
             let filename = 'access_token.json';
-
             //判断access_token.json是否存在
             fs.exists(filename, async function (exist) {
-
                 //不存在,去获取access_token
                 if (!exist) {
                     try {
-
                         let access_token = await that._setAccessToken(filename);
                         return resolve(access_token);
-
                     } catch (err) {
                         return reject(err);
                     }
 
-                } else {//存在，直接读取access_token.json
-
+                } else {
+                    //存在，直接读取access_token.json
                     fs.readFile(filename, async function (err, data) {
-
                         let access_token;
-
                         if (err) {
                             return reject(err);
                         }
                         try {
                             data = JSON.parse(data);
                             if (data && data.expire_time) {
-
                                 if (data.expire_time < new Date().getTime()) {
                                     try {
                                         access_token = await that._setAccessToken(filename);
@@ -118,7 +103,6 @@ class Jsapi {
                                 } else {
                                     access_token = data.access_token;
                                 }
-
                             } else {
                                 try {
                                     access_token = await that._setAccessToken(filename);
@@ -133,26 +117,18 @@ class Jsapi {
                                 return reject(err);
                             }
                         }
-
                         return resolve(access_token);
-
                     });
-
                 }
-
             });
-        })
+        });
     }
 
     // jsapi_ticket 应该全局存储与更新，这里写入到文件中
     _setJsApiTicket(filename) {
-
         let that = this;
-
         return new Promise(async function (resolve, reject) {
-
             let access_token;
-
             try {
                 access_token = await that.getAccessToken();
             } catch (err) {
@@ -164,9 +140,7 @@ class Jsapi {
             https.get(url, function (res) {
                 res.setEncoding('utf8');
                 res.on('data', function (data) {
-
                     if (data) {
-
                         data = JSON.parse(data);
 
                         //如果微信返回错误
@@ -193,8 +167,6 @@ class Jsapi {
                             //成功后返回access_token
                             return resolve(jsapi_ticket);
                         });
-
-
                     } else {
                         return reject(new Error("getJsApiTicket 请求返回数据为空"));
                     }
@@ -204,39 +176,28 @@ class Jsapi {
                 return resolve(err);
             });
         });
-
     }
 
     //获取jsapi_ticket
     getJsApiTicket() {
         let that = this;
-
         return new Promise(async function (resolve, reject) {
-
             let filename = 'jsapi_ticket.json';
-
-            //获取jsapi_ticket.json是否存在
+            // 获取jsapi_ticket.json是否存在
             fs.exists(filename, async function (exist) {
-
-                //不存在,获取jsapi_ticket
+                // 不存在,获取jsapi_ticket
                 if (!exist) {
-
                     let jsapi_ticket;
-
                     try {
                         jsapi_ticket = await that._setJsApiTicket(filename);
                         return resolve(jsapi_ticket);
                     } catch (err) {
                         return reject(err);
                     }
-
-                } else {//存在，直接读取jsapi_ticket.json
-
-                    // 异步读取
+                } else {
+                    // 存在，直接读取jsapi_ticket.json 异步读取
                     fs.readFile(filename, async function (err, data) {
-
                         let jsapi_ticket = "";
-
                         if (err) {
                             return reject(err);
                         }
@@ -244,21 +205,16 @@ class Jsapi {
                         try{
                             data = JSON.parse(data);
                             if (data && data.expire_time) {
-
                                 if (data.expire_time < new Date().getTime()) {
-
                                     try {
                                         jsapi_ticket = await that._setJsApiTicket(filename);
                                     } catch (err) {
                                         reject(err);
                                     }
-
                                 } else {
                                     jsapi_ticket = data.jsapi_ticket;
                                 }
-
                             } else {
-
                                 try {
                                     jsapi_ticket = await that._setJsApiTicket(filename);
                                 } catch (err) {
@@ -272,18 +228,14 @@ class Jsapi {
                                 reject(err);
                             }
                         }
-
                         return resolve(jsapi_ticket);
-
                     });
-
                 }
             });
         });
-
     }
 
-    //获取
+    // 获取签名信息
     async getSignPackage(url) {
         let jsapiTicket;
 
@@ -311,7 +263,7 @@ class Jsapi {
         };
         return signPackage;
     }
-
+    
     async setMenus() {
         let access_token;
 
