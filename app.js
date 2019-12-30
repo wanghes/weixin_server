@@ -30,7 +30,6 @@ app.get('/', function (req, res) {
     const hashCode = crypto.createHash('sha1'); //创建加密类型 
     var resultCode = hashCode.update(tempStr, 'utf8').digest('hex'); //对传入的字符串进行加密
 
-    console.log(signature);
     //4.开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
     if (resultCode === signature) {
         res.send(echostr);
