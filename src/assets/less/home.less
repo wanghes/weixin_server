@@ -1,0 +1,334 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.main {
+    width: 1170px !important;
+    margin: 0 auto;
+}
+.header {
+    height: 80px !important;
+    background: #409eff;
+    color: #fff;
+}
+.header_wrap {
+    display: flex;
+    justify-content: space-between;
+    width: 1170px !important;
+    margin: 0 auto;
+}
+.header_wrap .login_info {
+    color: #fff;
+    font-size: 14px;
+    line-height: 80px;
+}
+.header h3 {
+    padding-top: 10px;
+    font-size: 24px;
+    text-align: left;
+}
+.header .title span {
+    font-size: 14px;
+    display: block;
+}
+.quit_btn {
+    color: #fff;
+    text-decoration: none;
+    padding-left: 10px;
+}
+.box-card.person-info {
+    height: 170px;
+    text-align: left;
+    .line1 {
+        .name {
+            font-weight: bold;
+            margin-right: 15px;
+        }
+    }
+    .line2 {
+        font-size: 14px;
+        .gang {
+            margin: 0 10px;
+        }
+        margin: 0px 0 20px;
+    }
+    .shool {
+        font-size: 12px;
+        line-height: 30px;
+    }
+}
+.person_btn {
+    display: flex;
+    justify-content: space-between;
+}
+.box-card-notices {
+    text-align: left;
+    height: 170px;
+    h3 {
+        font-weight: bold;
+        font-size: 18px;
+        color: #409eff;
+        line-height: 30px;
+        margin-bottom: 10px;
+    }
+}
+.liucheng {
+    height: auto;
+    text-align: left;
+    h3 {
+        font-weight: bold;
+        position: relative;
+        text-indent: 0.5em; 
+        font-size: 18px;
+        color: #409eff;
+        line-height: 30px;
+        &::before{
+            content: "";
+            height: 18px;
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 3px;
+            background-color: #409eff;
+        }
+        
+        margin-bottom: 10px;
+
+    }
+    .el-tab-pane{
+        border-top: 1px solid #efefef;
+        border-left: 1px solid #efefef;
+        border-right: 1px solid #efefef;
+    }
+    .item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0 15px;
+        border-bottom: 1px solid #efefef;
+        transition: all .3s linear;
+        &:hover{
+            background-color: #f7f7f7;
+            .two{
+                h4.title{
+                    color:#333;
+                }
+            }
+        }
+        .one{
+            width: 80px;
+            text-align: center;
+            .biao{
+                font-size: 20px;
+                &.nodone{
+                    color:orange;
+                }
+            }
+            span{
+                display: block;
+                font-size: 12px;
+            }
+        }
+        .two{
+            flex:1;
+            padding-left: 5px;
+            .time{
+                font-size: 12px;
+                em{
+                    font-style: normal;
+                    color:orange;
+                }
+            }
+            h4.title{
+                font-size: 16px;
+                margin-top: 8px;
+                color:#666;
+                cursor: pointer;
+            }
+            .label{
+                font-size:13px;
+                margin-top: 8px;
+                span{
+                    display: inline-block;
+                    color:#666;
+                    position: relative;
+                    padding:0 15px;
+                    &:first-child{
+                        padding-left: 0;
+                        &::after{
+                            width: 0;
+                        }
+                    }
+                    &::after{
+                        content:"";
+                        position: absolute;
+                        left:0;
+                        top:3px;
+                        display: inline-block;
+                        width: 1px;
+                        height: 14px;
+                        background-color: #666;
+                    }
+                }
+            }
+        }
+        .three{
+            width: 150px;
+            text-align: center;
+        }
+        &.nodone{
+            .one{
+                span{
+                    color:#e98f36;
+                }
+            }
+        }
+        &.done{
+            .one{
+                span{
+                    color: #2c2c2c;
+                }
+            }
+        }
+        &.zancun{
+            .one{
+                span{
+                    color:#409eff;
+                }
+            }
+        }
+        
+    }
+    .tab_pager{
+        padding: 45px 0;
+        text-align: center;
+    }
+}
+.el-step__head .el-step__icon.is-icon {
+    width: 50px !important;
+    height: 50px;
+    border-radius: 100%;
+    border: 1px solid #ddd;
+    top: -15px;
+    background: #fff;
+}
+.el-step__head.is-finish .el-step__icon.is-icon {
+    border: 1px solid #409eff;
+    background: #f5fcff;
+}
+.el-step__head.is-process .el-step__icon.is-icon {
+    border: 1px solid #000;
+    background: #fff;
+}
+.el-step__title {
+    position: relative;
+    top: -10px;
+}
+
+.box-card-notices {
+    text-align: left;
+    height: 170px;
+    h3 {
+        font-weight: bold;
+        font-size: 18px;
+        color: #409eff;
+        line-height: 30px;
+        margin-bottom: 10px;
+        .bor {
+            display: inline-block;
+            border-left: 5px solid #409eff;
+            height: 18px;
+            vertical-align: middle;
+            position: relative;
+            margin-right: 5px;
+            top: -3px;
+        }
+    }
+    .con {
+        display: flex;
+        justify-content: space-between;
+        .item {
+            width: 50%;
+            text-align: center;
+            padding-top: 10px;
+            strong {
+                display: block;
+                color: orange;
+                font-size: 20px;
+            }
+            span {
+                display: block;
+                color: #666;
+                font-size:14px;
+                margin-bottom: 10px;
+            }
+        }
+        &.con_tongji {
+            .item {
+                width: 33.3%;
+                strong {
+                    color: #333;
+                }
+            }
+        }
+    }
+}
+
+.box-card-pingyue{
+    text-align: left;
+    height: 170px;
+    h3 {
+        font-weight: bold;
+        font-size: 18px;
+        color: #409eff;
+        line-height: 30px;
+        margin-bottom: 10px;
+        .bor {
+            display: inline-block;
+            border-left: 5px solid #409eff;
+            height: 18px;
+            vertical-align: middle;
+            position: relative;
+            margin-right: 5px;
+            top: -3px;
+        }
+    }
+    .con{
+        display: flex;
+        justify-content: space-between;
+        .item {
+            width: 33.3%;
+            text-align: center;
+            padding-top: 10px;
+            .ic{
+                color: orange;
+                width: 20px;
+                vertical-align: bottom;
+                margin-right: 5px;
+            }
+            b{
+                font-size: 14px;
+                strong {
+                    display: inline-block;
+                    color: orange;
+                    margin: 0 5px;
+                }
+            }
+            span {
+                color: #666;
+                display: block;
+                font-size:14px;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+            .el-input {
+                .el-button{
+                    span{
+                        font-size: 12px;
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
