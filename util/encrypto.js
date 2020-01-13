@@ -7,20 +7,27 @@ const encryptoSha1 = (pass) =>{
 	return sha1.digest('hex')
 }
 
-// 创建对称加密 加密算法
-const aesEncode = (data, key = encryptoKey) => {
-    const cipher = crypto.createCipheriv('aes192', key);
-    var crypted = cipher.update(data, 'utf8', 'hex');
-    crypted += cipher.final('hex');
-    return crypted;
+const key = Buffer.from('9vApxLk5G3PAsJrM', 'utf8');
+const iv = Buffer.from('FnJL7EDzjqWjcaY9', 'utf8');
+
+// 加密
+function aesEncode(src) {
+    let sign = '';
+    const cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
+    sign += cipher.update(src, 'utf8', 'hex');
+    sign += cipher.final('hex');
+    return sign;
 }
-// 创建对称加密 解密算法
-const aesDecode = (encrypted, key = encryptoKey) => {
-    const decipher = crypto.createDecipheriv('aes192', key);
-    var decrypted = decipher.update(encrypted, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+
+// 解密
+function aesDecode(sign) {
+    let src = '';
+    const cipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
+    src += cipher.update(sign, 'hex', 'utf8');
+    src += cipher.final('utf8');
+    return src;
 }
+
 
 module.exports = {
     encryptoSha1,
