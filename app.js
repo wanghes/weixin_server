@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded());
 app.use(expressJWT({
     secret: secretOrPrivateKey   
 }).unless({
-    path: ['/', '/wxJssdk/public', '/getAccessToken','/jssdk','/oauth']  //除了这个地址，其他的URL都需要验证
+    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken','/jssdk','/oauth']  //除了这个地址，其他的URL都需要验证
 }));
 
 //静态文件伺服
