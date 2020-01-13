@@ -106,6 +106,15 @@ app.get("/oauth", (req, res) => {
     })
 });
 
+app.post('/api/getMenus', (req, res) => {
+    var result = jssdk.getMenus();
+    result.then(function(data) {
+        res.send(data);
+    }, function(err) {
+        res.send(err);
+    });
+});
+
 app.post('/api/setMenus', (req, res) => {
     let data = req.body.data;
     // var data = {
