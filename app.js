@@ -6,6 +6,20 @@ const express = require('express'), //express 框架
     config = require('./config'); //引入配置文件
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const expressJWT = require('express-jwt');
+const jwt = require('jsonwebtoken');
+
+const encrypto = require('./util/encrypto.js');
+const { aesEncode,aesDecode } = encrypto;
+
+var user = {
+    id: 1,
+    name: "admin",
+    password: "0206bf549aca957b606312df3ba5414b"
+}
+
+
+var secretOrPrivateKey = "map_weixin";
 
 var app = express(); //实例express框架
 
@@ -17,8 +31,55 @@ app.use(cors());
 app.use(bodyParser.json()); 
 // 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded());
+
+app.use(expressJWT({
+    secret: secretOrPrivateKey   
+}).unless({
+    path: ['/', '/wxJssdk/public', '/getAccessToken','/jssdk','/oauth']  //除了这个地址，其他的URL都需要验证
+}));
+
 //静态文件伺服
 app.use('/wxJssdk/public', express.static('public'));
+
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {   
+        //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
+        res.status(401).send('invalid token...');
+    }
+});
+
+const getToken = (name, password, id) =>{
+	return new Promise((resolve, reject) =>{
+		let data = { name, password, id };
+		jwt.sign(data, secretOrPrivateKey,  { expiresIn: 60 * 60 * 24 * 3}, (err, token) => { //登录token设置24小时过期时间
+			if(err) {
+				reject(err);
+			}else{
+				resolve(token);
+			}
+		});
+	})
+}
+
+app.post('/admin/login', function(req,res) {
+    let name = req.body.name;
+	let password = req.body.password;
+	let db_pass = aesDecode(user.password);
+    if(db_pass == password){
+        let token = await getToken(name, password, user.id)
+        res.send({
+            code:0,
+            token,
+            user,
+            msg:"登录成功！"
+        });
+    }else{
+        res.send({
+            code:1,
+            msg:"密码不正确！"
+        });
+    }
+});
 
 //用于处理所有进入 3000 端口 get 的连接请求
 app.get('/', function(req, res) {
