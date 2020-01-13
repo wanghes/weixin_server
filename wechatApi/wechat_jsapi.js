@@ -263,9 +263,24 @@ class Jsapi {
         return signPackage;
     }
 
+//    https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=ACCESS_TOKEN
+
+    async getMenus() {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            return err;
+        }
+
+        let url = `https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=${access_token}`;
+        
+        var result = await request.requestGet(url)
+        return result;
+    }
+
     async setMenus(data) {
         let access_token;
-
         try {
             access_token = await this.getAccessToken();
         } catch (err) {
