@@ -66,7 +66,7 @@ app.post('/api/admin/login', function(req,res) {
 	let password = req.body.password;
 	let db_pass = aesDecode(user.password);
     if(db_pass == password){
-        let token = getToken(name, password, user.id).then(() => {
+        getToken(name, password, user.id).then((token) => {
             res.send({
                 code:0,
                 token,
