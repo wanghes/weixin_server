@@ -18,7 +18,6 @@ var user = {
     password: "eba1279512c5eb143f1b75e73e6e5e9e"
 }
 
-
 var secretOrPrivateKey = "map_weixin";
 
 var app = express(); //实例express框架
@@ -64,9 +63,12 @@ const getToken = (name, password, id) =>{
 app.post('/api/admin/login', function(req,res) {
     let name = req.body.name;
 	let password = req.body.password;
-	let db_pass = aesDecode(user.password);
+    let db_pass = aesDecode(user.password);
+    console.log(db_pass)
+    console.log(req.body)
     if(db_pass == password){
         getToken(name, password, user.id).then((token) => {
+            console.log(token)
             res.send({
                 code:0,
                 token,
