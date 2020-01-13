@@ -61,7 +61,7 @@ const getToken = (name, password, id) =>{
 	})
 }
 
-app.post('/admin/login', function(req,res) {
+app.post('/api/admin/login', function(req,res) {
     let name = req.body.name;
 	let password = req.body.password;
 	let db_pass = aesDecode(user.password);
