@@ -77,6 +77,8 @@ app.post('/api/admin/login', function(req,res) {
                 },
                 msg:"登录成功！"
             });
+        }).catch((err)=>{
+            console.log(err)
         });
     }else{
         res.send({
