@@ -66,12 +66,13 @@ app.post('/admin/login', function(req,res) {
 	let password = req.body.password;
 	let db_pass = aesDecode(user.password);
     if(db_pass == password){
-        let token = await getToken(name, password, user.id)
-        res.send({
-            code:0,
-            token,
-            user,
-            msg:"登录成功！"
+        let token = getToken(name, password, user.id).then(() => {
+            res.send({
+                code:0,
+                token,
+                user,
+                msg:"登录成功！"
+            });
         });
     }else{
         res.send({
