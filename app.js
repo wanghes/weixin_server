@@ -106,7 +106,7 @@ app.get("/oauth", (req, res) => {
     })
 });
 
-app.post('/api/getMenus', (req, res) => {
+app.get('/api/getMenus', (req, res) => {
     var result = jssdk.getMenus();
     result.then(function(data) {
         res.send(data);
