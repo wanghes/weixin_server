@@ -106,7 +106,7 @@ app.get("/oauth", (req, res) => {
     })
 });
 
-app.post('/setMenus', (req, res) => {
+app.post('/api/setMenus', (req, res) => {
     let data = req.body.data;
     // var data = {
     //     'button': [{
