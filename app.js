@@ -15,7 +15,7 @@ const { aesEncode,aesDecode } = encrypto;
 var user = {
     id: 1,
     name: "admin",
-    password: "0206bf549aca957b606312df3ba5414b"
+    password: "eba1279512c5eb143f1b75e73e6e5e9e"
 }
 
 
