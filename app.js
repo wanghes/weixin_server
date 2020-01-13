@@ -4,17 +4,24 @@ const express = require('express'), //express 框架
     https = require('./util/https'),
     // https = require('https'),
     config = require('./config'); //引入配置文件
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 var app = express(); //实例express框架
 
 //实例Jsapi
 var jssdk = new Jsapi(config.appID, config.appScrect);
 
+app.use(cors());
+// 解析 application/json
+app.use(bodyParser.json()); 
+// 解析 application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded());
 //静态文件伺服
 app.use('/wxJssdk/public', express.static('public'));
 
 //用于处理所有进入 3000 端口 get 的连接请求
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     //1.获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
     var signature = req.query.signature, //微信加密签名
         timestamp = req.query.timestamp, //时间戳
@@ -39,7 +46,7 @@ app.get('/', function (req, res) {
 });
 
 //用于请求获取 access_token
-app.get('/getAccessToken', function (req, res) {
+app.get('/getAccessToken', function(req, res) {
     jssdk.getAccessToken().then(
         re => res.send({
             "code": 0,
@@ -57,7 +64,7 @@ app.get('/getAccessToken', function (req, res) {
 });
 
 //用于JS-SDK使用权限签名算法
-app.get('/jssdk', function (req, res) {
+app.get('/jssdk', function(req, res) {
     //获取传入的url
     let url = req.query.url;
     //使用签名算法计算出signature
@@ -87,24 +94,43 @@ app.get("/oauth", (req, res) => {
     //获取code值
     let code = req.query.code;
     //通过code换取网页授权access_token
-    https.requestGet(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${config.appID}&secret=${config.appScrect}&code=${code}&grant_type=authorization_code`).then(function (data) {
-        let {access_token,openid} = JSON.parse(data);
+    https.requestGet(`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${config.appID}&secret=${config.appScrect}&code=${code}&grant_type=authorization_code`).then(function(data) {
+        let {
+            access_token,
+            openid
+        } = JSON.parse(data);
         //拉取用户信息
-        https.requestGet(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`).then(result =>{
-            res.send(result)
-        })
+        https.requestGet(`https://api.weixin.qq.com/sns/userinfo?access_token=${access_token}&openid=${openid}&lang=zh_CN`).then(result => {
+            res.send(result);
+        });
     })
 });
 
-app.get('/setMenus', (req, res) => {
-    var result = jssdk.setMenus();
-    result.then(function(data){
-        console.log(data);
-    }, function(err){
-        console.log(err);
+app.post('/setMenus', (req, res) => {
+    let data = req.body.data;
+    // var data = {
+    //     'button': [{
+    //             'type': 'view',
+    //             'name': '智慧巡店',
+    //             'key': 'V1001_WISDOM_FIND_SHOP',
+    //             "url": "http://www.soso.com/"
+    //         },
+    //         {
+    //             'type': 'view',
+    //             'name': '帮你寻车',
+    //             'key': 'V1001_HELP_YOU_FIND_CAR',
+    //             "url": "http://www.soso.com/"
+    //         }
+    //     ]
+    // };
+
+    // data = JSON.stringify(data);
+    var result = jssdk.setMenus(data);
+    result.then(function(data) {
+        res.send(data);
+    }, function(err) {
+        res.send(err);
     });
-    
-    res.send(result);
 });
 
 

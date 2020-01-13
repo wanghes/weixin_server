@@ -1,5 +1,4 @@
 //用于管理和获取微信 JSSDK 生产的access_token、jsapi_ticket和签名（signature）
-
 let fs = require("fs");
 let https = require('https');
 let crypto = require('crypto');
@@ -26,9 +25,9 @@ class Jsapi {
         return new Promise((resolve, reject) => {
             let url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${this.appId}&secret=${this.appSecret}`;
             //向微信服务器发送请求
-            https.get(url, function (res) {
+            https.get(url, function(res) {
                 res.setEncoding('utf8');
-                res.on('data', function (data) {
+                res.on('data', function(data) {
                     if (data) {
                         data = JSON.parse(data);
 
@@ -49,7 +48,7 @@ class Jsapi {
                         };
 
                         //获得的access_token写入文件
-                        fs.writeFile(filename, JSON.stringify(insert_data), function (err) {
+                        fs.writeFile(filename, JSON.stringify(insert_data), function(err) {
                             if (err) {
                                 return reject(new Error("access_token写入文件失败"));
                             }
@@ -62,7 +61,7 @@ class Jsapi {
                     }
 
                 });
-            }).on("error", function (err) {
+            }).on("error", function(err) {
                 return resolve(err);
             });
         });
@@ -71,10 +70,10 @@ class Jsapi {
     //获取access_token
     getAccessToken() {
         let that = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
             let filename = 'access_token.json';
             //判断access_token.json是否存在
-            fs.exists(filename, async function (exist) {
+            fs.exists(filename, async function(exist) {
                 //不存在,去获取access_token
                 if (!exist) {
                     try {
@@ -86,7 +85,7 @@ class Jsapi {
 
                 } else {
                     //存在，直接读取access_token.json
-                    fs.readFile(filename, async function (err, data) {
+                    fs.readFile(filename, async function(err, data) {
                         let access_token;
                         if (err) {
                             return reject(err);
@@ -127,7 +126,7 @@ class Jsapi {
     // jsapi_ticket 应该全局存储与更新，这里写入到文件中
     _setJsApiTicket(filename) {
         let that = this;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async function(resolve, reject) {
             let access_token;
             try {
                 access_token = await that.getAccessToken();
@@ -137,9 +136,9 @@ class Jsapi {
 
             let url = `https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=${access_token}&type=jsapi`;
 
-            https.get(url, function (res) {
+            https.get(url, function(res) {
                 res.setEncoding('utf8');
-                res.on('data', function (data) {
+                res.on('data', function(data) {
                     if (data) {
                         data = JSON.parse(data);
 
@@ -160,7 +159,7 @@ class Jsapi {
                         };
 
                         //获得的access_token写入文件
-                        fs.writeFile(filename, JSON.stringify(insert_data), function (err) {
+                        fs.writeFile(filename, JSON.stringify(insert_data), function(err) {
                             if (err) {
                                 return reject(new Error("jsapi_ticket写入文件失败"));
                             }
@@ -172,7 +171,7 @@ class Jsapi {
                     }
 
                 });
-            }).on("error", function (err) {
+            }).on("error", function(err) {
                 return resolve(err);
             });
         });
@@ -181,10 +180,10 @@ class Jsapi {
     //获取jsapi_ticket
     getJsApiTicket() {
         let that = this;
-        return new Promise(async function (resolve, reject) {
+        return new Promise(async function(resolve, reject) {
             let filename = 'jsapi_ticket.json';
             // 获取jsapi_ticket.json是否存在
-            fs.exists(filename, async function (exist) {
+            fs.exists(filename, async function(exist) {
                 // 不存在,获取jsapi_ticket
                 if (!exist) {
                     let jsapi_ticket;
@@ -196,13 +195,13 @@ class Jsapi {
                     }
                 } else {
                     // 存在，直接读取jsapi_ticket.json 异步读取
-                    fs.readFile(filename, async function (err, data) {
+                    fs.readFile(filename, async function(err, data) {
                         let jsapi_ticket = "";
                         if (err) {
                             return reject(err);
                         }
-                        
-                        try{
+
+                        try {
                             data = JSON.parse(data);
                             if (data && data.expire_time) {
                                 if (data.expire_time < new Date().getTime()) {
@@ -263,8 +262,8 @@ class Jsapi {
         };
         return signPackage;
     }
-    
-    async setMenus() {
+
+    async setMenus(data) {
         let access_token;
 
         try {
@@ -273,23 +272,7 @@ class Jsapi {
             return err;
         }
         let url = `https://api.weixin.qq.com/cgi-bin/menu/create?access_token=${access_token}`;
-        var data = {
-            'button':[
-             {    
-                'type':'view',
-                'name':'智慧巡店',
-                'key':'V1001_WISDOM_FIND_SHOP',
-                "url":"http://www.soso.com/"
-             },
-             {    
-                'type':'view',
-                'name':'帮你寻车',
-                'key':'V1001_HELP_YOU_FIND_CAR',
-                "url":"http://www.soso.com/"
-             }]
-        };
-
-        data = JSON.stringify(data);
+        
         var result = await request.requestPost(url, data)
         return result;
     }
