@@ -70,7 +70,9 @@ app.post('/api/admin/login', function(req,res) {
             res.send({
                 code:0,
                 token,
-                user,
+                user:{
+                    name: user.name
+                },
                 msg:"登录成功！"
             });
         });
