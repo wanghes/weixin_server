@@ -24,12 +24,10 @@ class Jsapi {
     _setAccessToken(filename) {
         return new Promise((resolve, reject) => {
             let url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${this.appId}&secret=${this.appSecret}`;
-            console.log(url);
             //向微信服务器发送请求
             https.get(url, function(res) {
                 res.setEncoding('utf8');
                 res.on('data', function(data) {
-                    console.log(data);
                     if (data) {
                         data = JSON.parse(data);
 
@@ -108,6 +106,7 @@ class Jsapi {
                                 try {
                                     access_token = await that._setAccessToken(filename);
                                 } catch (err) {
+                                    console.log(err);
                                     return reject(err);
                                 }
                             }
