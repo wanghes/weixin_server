@@ -174,9 +174,10 @@ app.get("/oauth", (req, res) => {
 
 app.get('/api/getMenus', (req, res) => {
     var result = jssdk.getMenus();
-    console.log(result)
+    
     
     result.then(function(data) {
+        console.log(data)
         res.send(data);
     }, function(err) {
         console.log(err)
