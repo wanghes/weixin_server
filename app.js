@@ -2,7 +2,6 @@ const express = require('express'), //express 框架
     crypto = require('crypto'), //引入加密模块
     Jsapi = require("./wechatApi/wechat_jsapi"), //Wechat JS-API接口
     https = require('./util/https'),
-    // https = require('https'),
     config = require('./config'); //引入配置文件
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -32,7 +31,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 
 app.use(expressJWT({
-    secret: secretOrPrivateKey   
+    secret: secretOrPrivateKey
 }).unless({
     path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken','/jssdk','/oauth']  //除了这个地址，其他的URL都需要验证
 }));
