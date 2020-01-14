@@ -1,6 +1,8 @@
 {
     "token": "wang_hes",
-    "appID": "wxac825b979a96503d",
-    "appScrect": "fff0eb9778e37eee0428b534cec68ea6",
+    "appID": "wx001bb10176d52c74",
+    "appID1": "wxac825b979a96503d",
+    "appScrect": "0434c340e3cb1b922ccce5cdcd85a6fb",
+    "appScrect1": "fff0eb9778e37eee0428b534cec68ea6",
     "secretOrPrivateKey": "map_weixin"
 }

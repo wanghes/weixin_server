@@ -14,14 +14,12 @@ var user = {
     id: 1,
     name: "admin",
     password: "eba1279512c5eb143f1b75e73e6e5e9e"
-}
-
-var secretOrPrivateKey = "map_weixin";
-
-var app = express(); //实例express框架
-
+};
 //实例Jsapi
 var jssdk = new Jsapi(config.appID, config.appScrect);
+
+
+var app = express(); //实例express框架
 
 app.use(cors());
 app.use(bodyParser.json()); 
@@ -31,7 +29,7 @@ app.use(expressJWT({
     secret: config.secretOrPrivateKey
 }).unless({
     //除了这个地址，其他的URL都需要验证
-    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken', '/jssdk', '/oauth']  
+    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken', '/jssdk', '/oauth']
 }));
 
 //静态文件伺服
