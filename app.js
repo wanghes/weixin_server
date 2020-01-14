@@ -182,7 +182,7 @@ app.get('/api/getMenus', (req, res) => {
         res.send({
             "code": 1,
             "message": "err",
-            "err": err
+            "err": err.toString()
         });
     });
 });
