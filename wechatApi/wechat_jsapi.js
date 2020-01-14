@@ -272,6 +272,7 @@ class Jsapi {
         try {
             access_token = await this.getAccessToken();
         } catch (err) {
+            console.log(err);
             return err;
         }
 
