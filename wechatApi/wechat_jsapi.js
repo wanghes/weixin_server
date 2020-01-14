@@ -106,7 +106,6 @@ class Jsapi {
                                 try {
                                     access_token = await that._setAccessToken(filename);
                                 } catch (err) {
-                                    console.log(err);
                                     return reject(err);
                                 }
                             }
@@ -114,6 +113,7 @@ class Jsapi {
                             try {
                                 access_token = await that._setAccessToken(filename);
                             } catch (err) {
+                                console.log(err);
                                 return reject(err);
                             }
                         }
