@@ -272,7 +272,7 @@ class Jsapi {
         try {
             access_token = await this.getAccessToken();
         } catch (err) {
-            console.log(typeof err);
+            console.log(Object.prototype.toString.call(err));
             throw err;
             return err;
         }
