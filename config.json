@@ -1,5 +1,6 @@
 {
     "token": "map",
     "appID": "wx001bb10176d52c74",
-    "appScrect": "0434c340e3cb1b922ccce5cdcd85a6fb"
+    "appScrect": "0434c340e3cb1b922ccce5cdcd85a6fb",
+    "secretOrPrivateKey": "map_weixin"
 }

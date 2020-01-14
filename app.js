@@ -1,15 +1,14 @@
-const express = require('express'), //express 框架 
-    crypto = require('crypto'), //引入加密模块
-    Jsapi = require("./wechatApi/wechat_jsapi"), //Wechat JS-API接口
-    https = require('./util/https'),
-    config = require('./config'); //引入配置文件
+const express = require('express'); 
+const crypto = require('crypto');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const expressJWT = require('express-jwt');
 const jwt = require('jsonwebtoken');
-
+const Jsapi = require("./wechatApi/wechat_jsapi");
+const https = require('./util/https');
+const config = require('./config'); //引入配置文件
 const encrypto = require('./util/encrypto.js');
-const { aesEncode,aesDecode } = encrypto;
+const { aesEncode, aesDecode } = encrypto;
 
 var user = {
     id: 1,
@@ -25,24 +24,20 @@ var app = express(); //实例express框架
 var jssdk = new Jsapi(config.appID, config.appScrect);
 
 app.use(cors());
-// 解析 application/json
 app.use(bodyParser.json()); 
-// 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded());
 
 app.use(expressJWT({
-    secret: secretOrPrivateKey
+    secret: config.secretOrPrivateKey
 }).unless({
-    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken','/jssdk','/oauth']  //除了这个地址，其他的URL都需要验证
+    //除了这个地址，其他的URL都需要验证
+    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken', '/jssdk', '/oauth']  
 }));
 
 //静态文件伺服
 app.use('/wxJssdk/public', express.static('public'));
-
 app.use(function (err, req, res, next) {
-    console.log(err)
     if (err.name === 'UnauthorizedError') {   
-        //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
         res.status(401).send('invalid token...');
     } else {
         res.status(500).send(err);
@@ -51,8 +46,9 @@ app.use(function (err, req, res, next) {
 
 const getToken = (name, password, id) =>{
 	return new Promise((resolve, reject) =>{
-		let data = { name, password, id };
-		jwt.sign(data, secretOrPrivateKey,  { expiresIn: 60 * 60 * 24 * 3}, (err, token) => { //登录token设置24小时过期时间
+        let data = { name, password, id };
+        //登录token设置小72时过期时间
+		jwt.sign(data, config.secretOrPrivateKey,  { expiresIn: 60 * 60 * 24 * 3}, (err, token) => { 
 			if(err) {
 				reject(err);
 			}else{
@@ -70,41 +66,44 @@ app.post('/api/admin/login', function(req,res) {
         getToken(name, password, user.id).then((token) => {
             res.send({
                 code:0,
-                token,
-                user:{
-                    name: user.name
-                },
-                msg:"登录成功！"
+                message:"登录成功！",
+                "data": {
+                    token,
+                    user:{
+                        name: user.name
+                    },
+                }
             });
         }).catch((err)=>{
-            console.log(err)
+            res.send({
+                "code": 1,
+                "message": "err",
+                "err": err.toString()
+            })
         });
     }else{
         res.send({
-            code:1,
-            msg:"密码不正确！"
+            "code": 1,
+            "message": "密码不正确！",
+            "err": "err"
         });
     }
 });
 
-//用于处理所有进入 3000 端口 get 的连接请求
+//用于处理所有进入get的连接请求
 app.get('/', function(req, res) {
-    //1.获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
-    var signature = req.query.signature, //微信加密签名
-        timestamp = req.query.timestamp, //时间戳
-        nonce = req.query.nonce, //随机数
-        echostr = req.query.echostr; //随机字符串
+    var signature = req.query.signature,
+        timestamp = req.query.timestamp,
+        nonce = req.query.nonce,
+        echostr = req.query.echostr;
 
-    //2.将token、timestamp、nonce三个参数进行字典序排序
     var array = [config.token, timestamp, nonce];
     array.sort();
 
-    //3.将三个参数字符串拼接成一个字符串进行sha1加密
     var tempStr = array.join('');
-    const hashCode = crypto.createHash('sha1'); //创建加密类型 
-    var resultCode = hashCode.update(tempStr, 'utf8').digest('hex'); //对传入的字符串进行加密
+    const hashCode = crypto.createHash('sha1');
+    var resultCode = hashCode.update(tempStr, 'utf8').digest('hex');
 
-    //4.开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
     if (resultCode === signature) {
         res.send(echostr);
     } else {
@@ -112,7 +111,7 @@ app.get('/', function(req, res) {
     }
 });
 
-//用于请求获取 access_token
+//用于请求获取access_token
 app.get('/getAccessToken', function(req, res) {
     jssdk.getAccessToken().then(
         re => res.send({
@@ -132,9 +131,7 @@ app.get('/getAccessToken', function(req, res) {
 
 //用于JS-SDK使用权限签名算法
 app.get('/jssdk', function(req, res) {
-    //获取传入的url
     let url = req.query.url;
-    //使用签名算法计算出signature
     jssdk.getSignPackage(url).then(
         re => {
             return res.send({
@@ -176,9 +173,12 @@ app.get("/oauth", (req, res) => {
 app.get('/api/getMenus', (req, res) => {
     var result = jssdk.getMenus(); 
     result.then(function(data) {
-        res.send(data);
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
     }, function(err) {
-        console.log(err);
         res.send({
             "code": 1,
             "message": "err",
@@ -189,30 +189,28 @@ app.get('/api/getMenus', (req, res) => {
 
 app.post('/api/setMenus', (req, res) => {
     let data = req.body.data;
-    // var data = {
-    //     'button': [{
-    //             'type': 'view',
-    //             'name': '智慧巡店',
-    //             'key': 'V1001_WISDOM_FIND_SHOP',
-    //             "url": "http://www.soso.com/"
-    //         },
-    //         {
-    //             'type': 'view',
-    //             'name': '帮你寻车',
-    //             'key': 'V1001_HELP_YOU_FIND_CAR',
-    //             "url": "http://www.soso.com/"
-    //         }
-    //     ]
-    // };
-
-    // data = JSON.stringify(data);
     var result = jssdk.setMenus(data);
     result.then(function(data) {
         res.send(data);
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
     }, function(err) {
-        res.send(err);
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
     });
 });
+
+
+
+
+
+
 
 
 //监听3000端口
