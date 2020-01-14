@@ -40,6 +40,7 @@ app.use(expressJWT({
 app.use('/wxJssdk/public', express.static('public'));
 
 app.use(function (err, req, res, next) {
+    console.log(err)
     if (err.name === 'UnauthorizedError') {   
         //  这个需要根据自己的业务逻辑来处理（ 具体的err值 请看下面）
         res.status(401).send('invalid token...');
