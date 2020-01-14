@@ -178,6 +178,7 @@ app.get('/api/getMenus', (req, res) => {
     result.then(function(data) {
         res.send(data);
     }, function(err) {
+        console.log(err);
         res.send({
             "code": 1,
             "message": "err",
