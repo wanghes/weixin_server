@@ -277,7 +277,7 @@ class Jsapi {
         }
 
         let url = `https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=${access_token}`;
-        
+        console.log(1);
         var result = await request.requestGet(url)
         return result;
     }
