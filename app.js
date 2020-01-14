@@ -174,15 +174,15 @@ app.get("/oauth", (req, res) => {
 });
 
 app.get('/api/getMenus', (req, res) => {
-    var result = jssdk.getMenus();
-    
-    
+    var result = jssdk.getMenus(); 
     result.then(function(data) {
-        console.log(data)
         res.send(data);
     }, function(err) {
-        console.log(err)
-        res.send(err);
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err
+        });
     });
 });
 
