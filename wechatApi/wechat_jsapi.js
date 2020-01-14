@@ -271,7 +271,7 @@ class Jsapi {
             access_token = await this.getAccessToken();
         } catch (err) {
             // console.log(Object.prototype.toString.call(err));
-            throw new Error('test');
+            throw new Error(err);
         }
 
         let url = `https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=${access_token}`;
