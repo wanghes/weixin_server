@@ -7,11 +7,16 @@
 	<title>测试微信jssdk功能</title>
 	<script src="/wxJssdk/public/js/jquery.min.js"></script>
 	<script src="/wxJssdk/public/js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript" src="https://images.9liuda.com/sdk/static/vconsole.min.js"></script>
+    <script>
+      var vConsole = new VConsole();
+    </script>
 </head>
 
 <body>
 	<script type="text/javascript">
 		// 请求签名
+		try{
 		$.ajax({
 			url: "/jssdk",
 			type: 'get',
@@ -29,7 +34,8 @@
 						'checkJsApi',
 						'onMenuShareTimeline',
 						'onMenuShareAppMessage',
-						'onMenuShareQQ'
+						'onMenuShareQQ',
+						'onSearchBeacons'
 					]
 				});
 				wx.ready(function () {
@@ -39,15 +45,49 @@
 						link: "https://www.baidu.com/",
 						imgUrl: "http://admin.mousecloud.cn/upload/2018-02/big/big_3da3cf2687be88b62e4dc19a7058f6b2_e4d494ecc100da8c2715b5cebb228b70_3f50bbff80dfd97cec8501bfbba19620_haisong.jpg"
 					};
+
 					wx.onMenuShareAppMessage(shareData);
 					wx.onMenuShareTimeline(shareData);
 					wx.onMenuShareQQ(shareData);
+
+					try{
+						wx.stopSearchBeacons({
+						   complete:function(res){
+						   //回调函数
+						   		console.log("tingzhi")
+						   }
+						});
+						wx.startSearchBeacons({
+						   ticket:"",
+						   	complete:function(argv){
+							   	console.log(argv)
+							  	
+							   	//回调函数
+							   	// console.log(wx.onSearchBeacons)
+							   	wx.onSearchBeacons({
+								   complete:function(argv){
+								   //回调函数
+								   
+								  	console.log(argv);
+								   }
+								});
+						   	}
+						});
+
+						
+
+					} catch(e ) {
+						console.log(e)
+					}
 				});
 				wx.error(function (res) {
 					alert(res.errMsg); // 正式环境记得关闭啊！！！！
 				});
 			}
 		});
+	}catch(e) {
+		alert(e)
+	}
 	</script>
 </body>
 

@@ -288,6 +288,61 @@ class Jsapi {
         var result = await request.requestPost(url, data)
         return result;
     }
+    
+    async getFlowers() {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        }
+        let url = `https://api.weixin.qq.com/cgi-bin/user/get?access_token=${access_token}`;
+        var result = await request.requestGet(url)
+        return result;
+
+    }
+
+
+    async getUserInfo(openId) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        }
+        let url = ` https://api.weixin.qq.com/cgi-bin/user/info?access_token=${access_token}&openid=${openId}&lang=zh_CN`;
+        var result = await request.requestGet(url)
+        return result;
+
+    }
+
+    // 查看摇一摇周边申请情况结果
+    async getShakearound() {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+        let url = ` https://api.weixin.qq.com/shakearound/account/auditstatus?access_token=${access_token}`;
+        var result = await request.requestGet(url)
+        return result;
+    }
+    
+    // 查看设备审核状态
+    async getShakearoundDevices(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+
+        let url = `https://api.weixin.qq.com/shakearound/device/applystatus?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
 
 }
 

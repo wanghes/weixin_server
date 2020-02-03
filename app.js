@@ -8,6 +8,10 @@ const Jsapi = require("./wechatApi/wechat_jsapi");
 const https = require('./util/https');
 const config = require('./config'); //引入配置文件
 const encrypto = require('./util/encrypto.js');
+const ejs = require('ejs');
+const BeaconScanner = require('node-beacon-scanner');
+// var noble = require('noble');
+
 const { aesEncode, aesDecode } = encrypto;
 
 var user = {
@@ -29,11 +33,26 @@ app.use(expressJWT({
     secret: config.secretOrPrivateKey
 }).unless({
     //除了这个地址，其他的URL都需要验证
-    path: ['/', '/wxJssdk/public','/api/admin/login', '/getAccessToken', '/jssdk', '/oauth']
+    path: [
+        '/', 
+        '/wxJssdk/public',
+        '/wxJssdk/public/js/jquery.min.js',
+        '/wxJssdk/public/js/jweixin-1.4.0.js',
+        '/api/admin/login', 
+        '/getAccessToken', 
+        '/test.html', 
+        '/jssdk', 
+        '/oauth', 
+        '/test2',
+        '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
+    ]
 }));
 
+app.engine('html', ejs.__express);
+app.set('view engine', 'html');
 //静态文件伺服
 app.use('/wxJssdk/public', express.static('public'));
+app.use('/', express.static('public'));
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {   
         res.status(401).send('invalid token...');
@@ -56,6 +75,7 @@ const getToken = (name, password, id) =>{
 	})
 }
 
+
 app.post('/api/admin/login', function(req,res) {
     let name = req.body.name;
 	let password = req.body.password;
@@ -72,7 +92,7 @@ app.post('/api/admin/login', function(req,res) {
                     },
                 }
             });
-        }).catch((err)=>{
+        }).catch((err) =>{
             res.send({
                 "code": 1,
                 "message": "err",
@@ -87,6 +107,29 @@ app.post('/api/admin/login', function(req,res) {
         });
     }
 });
+
+
+app.get('/test2', function(req, res) {
+    const scanner = new BeaconScanner();
+    // Set an Event handler for becons
+   
+// Set an Event handler for becons
+scanner.onadvertisement = (ad) => {
+  console.log(JSON.stringify(ad, null, '  '));
+};
+
+// Start scanning
+scanner.startScan().then(() => {
+  console.log('Started to scan.')  ;
+}).catch((error) => {
+  console.error(error);
+});
+ 
+
+
+    res.render('index.ejs', {title: '测试页面'});
+});
+
 
 //用于处理所有进入get的连接请求
 app.get('/', function(req, res) {
@@ -204,12 +247,80 @@ app.post('/api/setMenus', (req, res) => {
     });
 });
 
+app.get('/api/getFlowers', (req,res) =>{
+    var result = jssdk.getFlowers(); 
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
 
+app.get('/api/getUserInfo/:openId', (req,res) =>{
+    var openId = req.params.openId;
+    var result = jssdk.getUserInfo(openId);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
 
+app.get('/api/getShakearound', (req,res) => {
+    var result = jssdk.getShakearound();
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
 
+app.post('/api/getShakearoundDevices', (req, res) => {
+    let data = req.body;
+    var result = jssdk.getShakearoundDevices(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
 
 
 
 
 //监听3000端口
-app.listen(3000);
+app.listen(80, '127.0.0.1', () => {
+    console.log('server is running');
+});
