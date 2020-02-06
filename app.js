@@ -126,6 +126,18 @@ app.get('/test2', function(req, res) {
 // });
 noble.startScanning();
 //console.log(noble);
+
+noble.on('stateChange', function(state){
+    console.log(state)
+});
+
+noble.on('scanStart', function() {
+    console.log("scanStart")
+});
+
+noble.on('scanStop', function() {
+    console.log("scanStop")
+});
  
     try {
     noble.on('discover', function(peripheral){
