@@ -9,7 +9,7 @@ const https = require('./util/https');
 const config = require('./config'); //引入配置文件
 const encrypto = require('./util/encrypto.js');
 const ejs = require('ejs');
-// const BeaconScanner = require('node-beacon-scanner');
+const BeaconScanner = require('node-beacon-scanner');
 var noble = require('noble');
 
 const { aesEncode, aesDecode } = encrypto;
@@ -110,22 +110,22 @@ app.post('/api/admin/login', function(req,res) {
 
 
 app.get('/test2', function(req, res) {
-//     const scanner = new BeaconScanner();
-//     // Set an Event handler for becons
+    const scanner = new BeaconScanner();
+    // Set an Event handler for becons
    
-// // Set an Event handler for becons
-// scanner.onadvertisement = (ad) => {
-//   console.log(JSON.stringify(ad, null, '  '));
-// };
+// Set an Event handler for becons
+scanner.onadvertisement = (ad) => {
+  console.log(JSON.stringify(ad, null, '  '));
+};
 
-// // Start scanning
-// scanner.startScan().then(() => {
-//   console.log('Started to scan.')  ;
-// }).catch((error) => {
-//   console.error(error);
-// });
+// Start scanning
+scanner.startScan().then(() => {
+  console.log('Started to scan.')  ;
+}).catch((error) => {
+  console.error(error);
+});
+/*
 noble.startScanning();
-//console.log(noble);
 
 noble.on('stateChange', function(state){
     console.log(state)
@@ -146,6 +146,7 @@ noble.on('scanStop', function() {
 } catch (e) {
     console.log(e);
 }
+*/
     res.render('index.ejs', {title: '测试页面'});
 
 });
