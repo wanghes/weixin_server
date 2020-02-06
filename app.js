@@ -124,6 +124,7 @@ app.get('/test2', function(req, res) {
 // }).catch((error) => {
 //   console.error(error);
 // });
+noble.startScanning();
 console.log(noble);
  
     try {
