@@ -125,7 +125,7 @@ app.get('/test2', function(req, res) {
 //   console.error(error);
 // });
 noble.startScanning();
-console.log(noble);
+//console.log(noble);
  
     try {
     noble.on('discover', function(peripheral){
