@@ -10,7 +10,7 @@ const config = require('./config'); //引入配置文件
 const encrypto = require('./util/encrypto.js');
 const ejs = require('ejs');
 // const BeaconScanner = require('node-beacon-scanner');
-var noble = require('noble');
+// var noble = require('noble');
 
 const { aesEncode, aesDecode } = encrypto;
 
