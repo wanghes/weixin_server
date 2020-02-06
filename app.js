@@ -124,12 +124,17 @@ app.get('/test2', function(req, res) {
 // }).catch((error) => {
 //   console.error(error);
 // });
+console.log(noble);
  
-
+    try {
     noble.on('discover', function(peripheral){
         console.log(peripheral);
     });
+} catch (e) {
+    console.log(e);
+}
     res.render('index.ejs', {title: '测试页面'});
+
 });
 
 
