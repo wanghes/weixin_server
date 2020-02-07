@@ -14,6 +14,9 @@ app.get('/', function(req, res) {
 	    noble.stopScanning();
 	  }
 	});
+	noble.on('warning', function(message) {
+		console.log(message)
+	});
 
 	noble.on('discover', function(peripheral) {
 	  console.log('peripheral discovered (' + peripheral.id +
