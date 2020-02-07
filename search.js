@@ -7,6 +7,7 @@ var app = express(); //实例express框架
 
 app.get('/', function(req, res) {
 	noble.on('stateChange', function(state) {
+		console.log(state)
 	  if (state === 'poweredOn') {
 	    noble.startScanning();
 	  } else {
@@ -46,13 +47,13 @@ app.get('/', function(req, res) {
 });
 
 app.get('/test', function(req,res) {
-	// const scanner = new BeaconScanner();
-	const scanner = new BeaconScanner({'noble': noble});
+	const scanner = new BeaconScanner();
+	// const scanner = new BeaconScanner({'noble': noble});
 
 
 	// Set an Event handler for becons
 	scanner.onadvertisement = (ad) => {
-	  console.log(JSON.stringify(ad, null, '  '));
+	  	console.log(JSON.stringify(ad, null, '  '));
 	};
 
 	// Start scanning
