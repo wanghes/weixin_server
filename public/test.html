@@ -16,7 +16,7 @@
 <body>
 	<script type="text/javascript">
 		// 请求签名
-		try{
+		
 		$.ajax({
 			url: "/jssdk",
 			type: 'get',
@@ -35,7 +35,12 @@
 						'onMenuShareTimeline',
 						'onMenuShareAppMessage',
 						'onMenuShareQQ',
-						'onSearchBeacons'
+						'onSearchBeacons',
+						"onScanWXDeviceResult",
+						"startScanWXDevice",
+						"stopScanWXDevice",
+						"openWXDeviceLib",
+						"getWXDeviceInfos"
 					]
 				});
 				wx.ready(function () {
@@ -50,44 +55,43 @@
 					wx.onMenuShareTimeline(shareData);
 					wx.onMenuShareQQ(shareData);
 
-					try{
-						wx.stopSearchBeacons({
-						   complete:function(res){
-						   //回调函数
-						   		console.log("tingzhi")
-						   }
-						});
-						wx.startSearchBeacons({
-						   ticket:"",
-						   	complete:function(argv){
-							   	console.log(argv)
-							  	
-							   	//回调函数
-							   	// console.log(wx.onSearchBeacons)
-							   	wx.onSearchBeacons({
-								   complete:function(argv){
-								   //回调函数
-								   
-								  	console.log(argv);
-								   }
-								});
-						   	}
-						});
+					wx.invoke('openWXDeviceLib', {'connType':'lan'}, function(res) {
+						console.log(res);
+					});
 
-						
+					wx.invoke('getWXDeviceInfos', {'connType':'lan'}, function(res) {
+						console.log('getWXDeviceInfos',res);
+					});
 
-					} catch(e ) {
-						console.log(e)
-					}
+					//扫描前请先监听设备扫描事件
+					wx.on("onScanWXDeviceResult",function(res){
+						console.log(res);
+					    alert("扫描到1个设备");
+					    //自己解析一下res，里面会有deviceid,扫描设备的目的就是为了得到这个
+					    //然后就可以开始绑定了
+					});
+
+					//开始扫描
+					wx.invoke("startScanWXDevice",{"btVersion":"ble"},function(res){
+						console.log(res);
+					});
+					//这里填的参数是ble,也可以填bc，bc是经典蓝牙，我们做的这个设备不支持经典蓝牙，所以直接填ble
+					//安卓系统不能同时支持bel和bc，这个后面详细说一下
+					//执行此方法后，就开始一直不停的扫描，扫描到了设备会触发上面的监听事件
+
+					//如果不想扫了，可以停止扫描
+					wx.invoke("stopScanWXDevice",{},function(res){
+						console.log(res)
+					});
+
 				});
+
 				wx.error(function (res) {
 					alert(res.errMsg); // 正式环境记得关闭啊！！！！
 				});
 			}
 		});
-	}catch(e) {
-		alert(e)
-	}
+
 	</script>
 </body>
 

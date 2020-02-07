@@ -10,7 +10,7 @@ const config = require('./config'); //引入配置文件
 const encrypto = require('./util/encrypto.js');
 const ejs = require('ejs');
 // const BeaconScanner = require('node-beacon-scanner');
-var noble = require('noble');
+// var noble = require('noble');
 
 const { aesEncode, aesDecode } = encrypto;
 
@@ -110,87 +110,7 @@ app.post('/api/admin/login', function(req,res) {
 
 
 app.get('/test2', function(req, res) {
-//     const scanner = new BeaconScanner();
-//     // Set an Event handler for becons
-   
-// // Set an Event handler for becons
-// scanner.onadvertisement = (ad) => {
-//   console.log(JSON.stringify(ad, null, '  '));
-// };
-
-// // Start scanning
-// scanner.startScan().then(() => {
-//   console.log('Started to scan.')  ;
-// }).catch((error) => {
-//   console.error(error);
-// });
-
-
-noble.on('stateChange', function(state) {
-  if (state === 'poweredOn') {
-    noble.startScanning();
-  } else {
-    noble.stopScanning();
-  }
-});
-
-noble.on('discover', function(peripheral) {
-  console.log('peripheral discovered (' + peripheral.id +
-              ' with address <' + peripheral.address +  ', ' + peripheral.addressType + '>,' +
-              ' connectable ' + peripheral.connectable + ',' +
-              ' RSSI ' + peripheral.rssi + ':');
-  console.log('\thello my local name is:');
-  console.log('\t\t' + peripheral.advertisement.localName);
-  console.log('\tcan I interest you in any of the following advertised services:');
-  console.log('\t\t' + JSON.stringify(peripheral.advertisement.serviceUuids));
-
-  var serviceData = peripheral.advertisement.serviceData;
-  if (serviceData && serviceData.length) {
-    console.log('\there is my service data:');
-    for (var i in serviceData) {
-      console.log('\t\t' + JSON.stringify(serviceData[i].uuid) + ': ' + JSON.stringify(serviceData[i].data.toString('hex')));
-    }
-  }
-  if (peripheral.advertisement.manufacturerData) {
-    console.log('\there is my manufacturer data:');
-    console.log('\t\t' + JSON.stringify(peripheral.advertisement.manufacturerData.toString('hex')));
-  }
-  if (peripheral.advertisement.txPowerLevel !== undefined) {
-    console.log('\tmy TX power level is:');
-    console.log('\t\t' + peripheral.advertisement.txPowerLevel);
-  }
-
-  console.log();
-});
-
-/*
-
-
-noble.startScanning();
-//console.log(noble);
-
-noble.on('stateChange', function(state){
-    console.log(state)
-});
-
-noble.on('scanStart', function() {
-    console.log("scanStart")
-});
-
-noble.on('scanStop', function() {
-    console.log("scanStop")
-});
- 
-    try {
-    noble.on('discover', function(peripheral){
-        console.log(peripheral);
-    });
-} catch (e) {
-    console.log(e);
-}
-*/
     res.render('index.ejs', {title: '测试页面'});
-
 });
 
 

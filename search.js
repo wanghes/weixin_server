@@ -1,5 +1,6 @@
 const express = require('express'); 
 const noble = require('noble');
+const BeaconScanner = require('node-beacon-scanner');
 
 
 var app = express(); //实例express框架
@@ -41,6 +42,25 @@ app.get('/', function(req, res) {
 
 	  console.log();
 	});
+	res.send("home");
+});
+
+app.get('/test', function(req,res) {
+	const scanner = new BeaconScanner();
+
+	// Set an Event handler for becons
+	scanner.onadvertisement = (ad) => {
+	  console.log(JSON.stringify(ad, null, '  '));
+	};
+
+	// Start scanning
+	scanner.startScan().then(() => {
+	  console.log('Started to scan.')  ;
+	}).catch((error) => {
+	  console.error(error);
+	});
+
+	res.send("test");
 });
 
 //监听3000端口
