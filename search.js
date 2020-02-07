@@ -46,7 +46,9 @@ app.get('/', function(req, res) {
 });
 
 app.get('/test', function(req,res) {
-	const scanner = new BeaconScanner();
+	// const scanner = new BeaconScanner();
+	const scanner = new BeaconScanner({'noble': noble});
+
 
 	// Set an Event handler for becons
 	scanner.onadvertisement = (ad) => {
@@ -55,7 +57,7 @@ app.get('/test', function(req,res) {
 
 	// Start scanning
 	scanner.startScan().then(() => {
-	  console.log('Started to scan.')  ;
+	  console.log('Started to scan.');
 	}).catch((error) => {
 	  console.error(error);
 	});
