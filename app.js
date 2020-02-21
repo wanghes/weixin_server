@@ -436,7 +436,12 @@ app.get('/wxsapApi/doLogin', (req, res) => {
 
 
 
-//监听3000端口
+//监听3002端口
+app.listen(3002, '0.0.0.0', () => {
+    console.log('server is running 3002');
+});
+/*
 app.listen(80, '0.0.0.0', () => {
     console.log('server is running');
 });
+*/
