@@ -5,12 +5,13 @@ const bodyParser = require('body-parser');
 const expressJWT = require('express-jwt');
 const jwt = require('jsonwebtoken');
 const Jsapi = require("./wechatApi/wechat_jsapi");
+//const WeixinSap = require("./wechatApi/weixin_sap");
 const https = require('./util/https');
-const config = require('./config'); //引入配置文件
+const config = require('./config');
 const encrypto = require('./util/encrypto.js');
 const ejs = require('ejs');
-// const BeaconScanner = require('node-beacon-scanner');
-// var noble = require('noble');
+const unless = require('express-unless');
+
 
 const { aesEncode, aesDecode } = encrypto;
 
@@ -19,11 +20,12 @@ var user = {
     name: "admin",
     password: "eba1279512c5eb143f1b75e73e6e5e9e"
 };
-//实例Jsapi
-var jssdk = new Jsapi(config.appID, config.appScrect);
-
 
 var app = express(); //实例express框架
+//实例Jsapi
+var jssdk = new Jsapi(config.appID, config.appScrect);
+// 微信小程序
+// var weixinSap = new WeixinSap("wx46eb37a96bf6f3d9", "f6a35e98ae4ffec8e57cd6cf9e345ab5");
 
 app.use(cors());
 app.use(bodyParser.json()); 
@@ -32,27 +34,27 @@ app.use(bodyParser.urlencoded());
 app.use(expressJWT({
     secret: config.secretOrPrivateKey
 }).unless({
-    //除了这个地址，其他的URL都需要验证
+    //除了这些地址，其他的URL都需要验证
     path: [
         '/', 
-        '/wxJssdk/public',
-        '/wxJssdk/public/js/jquery.min.js',
-        '/wxJssdk/public/js/jweixin-1.4.0.js',
         '/api/admin/login', 
         '/getAccessToken', 
-        '/test.html', 
+        '/wxsapApi/doLogin', 
         '/jssdk', 
         '/oauth', 
-        '/test2',
+        '/admin/',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
-    ]
+    ],
+    ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf']
 }));
 
-app.engine('html', ejs.__express);
-app.set('view engine', 'html');
-//静态文件伺服
-app.use('/wxJssdk/public', express.static('public'));
+// app.engine('html', ejs.__express);
+// app.set('view engine', 'html');
+
+app.use('/admin', express.static('admin'));
 app.use('/', express.static('public'));
+
+
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {   
         res.status(401).send('invalid token...');
@@ -109,9 +111,9 @@ app.post('/api/admin/login', function(req,res) {
 });
 
 
-app.get('/test2', function(req, res) {
-    res.render('index.ejs', {title: '测试页面'});
-});
+// app.get('/admin', function(req, res) {
+//     res.render('index.ejs', {title: '测试页面'});
+// });
 
 
 //用于处理所有进入get的连接请求
@@ -145,30 +147,31 @@ app.get('/getAccessToken', function(req, res) {
                 "access-token": re
             }
         })
-    ).catch(
-        err => res.send({
-            "code": 1,
-            "message": "err",
-            "err": err
-        }));
+    ).catch(err => res.send({
+        "code": 1,
+        "message": "err",
+        "err": err
+    }));
 });
 
 //用于JS-SDK使用权限签名算法
 app.get('/jssdk', function(req, res) {
     let url = req.query.url;
     jssdk.getSignPackage(url).then(
-        re => {
+        result => {
             return res.send({
                 "code": 0,
                 "message": "ok",
-                "data": re
+                "data": result
             })
         }
-    ).catch(err => res.send({
-        "code": 1,
-        "message": "err",
-        "err": err
-    }));
+    ).catch(err => {
+        return res.send({
+            "code": 1,
+            "message": "err",
+            "err": err
+        })
+    });
 });
 
 //微信网页授权
@@ -300,6 +303,136 @@ app.post('/api/getShakearoundDevices', (req, res) => {
     });
 });
 
+
+app.post("/api/setBeaconsGroup", (req, res) => {
+    let data = req.body;
+    var result = jssdk.setBeaconsGroup(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+app.post('/api/editBeaconsGroup', (req,res) => {
+    let data = req.body;
+    var result = jssdk.editBeaconsGroup(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+app.post("/api/getBeaconsGroup", (req,res) => {
+    let data = req.body;
+    var result = jssdk.getBeaconsGroup(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+app.post("/api/deleteBeaconsGroup", (req,res) => {
+    let data = req.body;
+    var result = jssdk.deleteBeaconsGroup(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+app.post('/api/addH5Beacon', (req,res) => {
+    let data = req.body;
+    var result = jssdk.addH5Beacon(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+
+app.post('/api/getBeaconsByGroupId', (req,res) => {
+    let data = req.body;
+    var result = jssdk.getBeaconsByGroupId(data);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+
+
+/*
+app.get('/wxsapApi/doLogin', (req, res) => {
+    let data = req.query;
+    var result = weixinSap.getOpenIdByCode(data.code);
+    result.then(function(data) {
+        res.send({
+            "code": 0,
+            "message": "ok",
+            "data": data
+        });
+    }, function(err) {
+        res.send({
+            "code": 1,
+            "message": "err",
+            "err": err.toString()
+        });
+    });
+});
+*/
 
 
 

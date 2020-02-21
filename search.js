@@ -70,6 +70,6 @@ app.get('/test', function(req,res) {
 });
 
 //监听3000端口
-app.listen(80, '0.0.0.0', () => {
+app.listen(3000, '0.0.0.0', () => {
     console.log('server is running');
 });

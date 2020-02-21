@@ -344,6 +344,86 @@ class Jsapi {
         return result;
     }
 
+    async setBeaconsGroup(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+
+        let url = `https://api.weixin.qq.com/shakearound/device/group/add?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
+    async editBeaconsGroup(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+
+        let url = `https://api.weixin.qq.com/shakearound/device/group/update?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
+    async getBeaconsGroup(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+        let url = `https://api.weixin.qq.com/shakearound/device/group/getlist?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
+    async addH5Beacon(data) { 
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+        let url = `https://api.weixin.qq.com/shakearound/device/group/adddevice?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
+    async deleteBeaconsGroup(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+        let url = `https://api.weixin.qq.com/shakearound/device/group/delete?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
+    async getBeaconsByGroupId(data) {
+        let access_token;
+        try {
+            access_token = await this.getAccessToken();
+        } catch (err) {
+            throw err;
+        } 
+        let url = `https://api.weixin.qq.com/shakearound/device/group/getdetail?access_token=${access_token}`;
+        var result = await request.requestPostJson(url, JSON.stringify(data));
+
+        return result;
+    }
+
 }
 
 

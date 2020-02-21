@@ -5,9 +5,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 	<title>测试微信jssdk功能</title>
-	<script src="/wxJssdk/public/js/jquery.min.js"></script>
-	<script src="/wxJssdk/public/js/jweixin-1.4.0.js"></script>
-	<script type="text/javascript" src="https://images.9liuda.com/sdk/static/vconsole.min.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jweixin-1.4.0.js"></script>
+	<script type="text/javascript" src="/js/vconsole.min.js"></script>
     <script>
       var vConsole = new VConsole();
     </script>
@@ -16,7 +16,6 @@
 <body>
 	<script type="text/javascript">
 		// 请求签名
-		
 		$.ajax({
 			url: "/jssdk",
 			type: 'get',
@@ -35,26 +34,96 @@
 						'onMenuShareTimeline',
 						'onMenuShareAppMessage',
 						'onMenuShareQQ',
+						// H5相关设备扫描api接口
 						'onSearchBeacons',
+						'startSearchBeacons',  
+                     	'stopSearchBeacons',
+                     	// 以下微信硬件平台接口
 						"onScanWXDeviceResult",
 						"startScanWXDevice",
 						"stopScanWXDevice",
 						"openWXDeviceLib",
-						"getWXDeviceInfos"
+						"getWXDeviceInfos",
+						"miniProgram"
 					]
 				});
 				wx.ready(function () {
+
+					wx.miniProgram.postMessage({ data: {foo: 'bar'} })
+					console.log(location.search)
+
+					wx.checkJsApi({
+			          	jsApiList: [
+			              	'onSearchBeacons',
+							'startSearchBeacons', 
+	                     	'stopSearchBeacons'
+			          	],
+			          	success: function(res) {
+			              	console.log(res)
+			          	}
+			      	});
+
 					var shareData = {
-						title: "123",
-						desc: "123456",
-						link: "https://www.baidu.com/",
-						imgUrl: "http://admin.mousecloud.cn/upload/2018-02/big/big_3da3cf2687be88b62e4dc19a7058f6b2_e4d494ecc100da8c2715b5cebb228b70_3f50bbff80dfd97cec8501bfbba19620_haisong.jpg"
+						title: "公众号开发信息",
+						desc: "开发者ID是公众号开发识别码，配合开发者密码可调用公众号的接口能力。",
+						link: "http://werotwang.vipgz4.idcfengye.com/test.html",
+						imgUrl: "http://img.mousecloud.cn/public/upload/1581843502844.jpeg",
 					};
 
 					wx.onMenuShareAppMessage(shareData);
 					wx.onMenuShareTimeline(shareData);
 					wx.onMenuShareQQ(shareData);
 
+					wx.startSearchBeacons({  
+					    ticket:"",  //摇周边的业务ticket, 系统自动添加在摇出来的页面链接后面  
+					    success: function(res){  
+					    	console.log(res);
+					        wx.onSearchBeacons({  
+					        	complete:function(data){  
+					        		// alert(JSON.stringify(data));    
+					        		//alert(data.beacons);//处理返回的beacon数组  
+					        		console.log("data:" + JSON.stringify(data)) 
+					        		wx.stopSearchBeacons({
+									  	complete:function(res){
+									    	//关闭查找完成后的回调函数
+									  	}
+									});
+					         	} ,
+					         	fail:function(res){ 
+					         		 
+					         		console.log("fail");
+					         		wx.stopSearchBeacons({
+									  	complete:function(res){
+									    	//关闭查找完成后的回调函数
+									  	}
+									});
+					         	}
+					      	});  
+				     	},  
+				        fail:function(res){  
+					        var errmsg = JSON.stringify(res.errMsg);  
+			                var arr = errmsg.split(':');  
+					        var errmsgBody = arr[1];  
+				           	if (errmsgBody.substr(0, 9) == "bluetooth") {  
+				                alert("蓝牙未打开，请打开后重试！");  
+				           	} else if (errmsgBody.substr(0, 8) == "location"){  
+				                alert("手机位置未打开，请打开后重试！");  
+				           	} else {  
+				                alert(JSON.stringify(res));  
+				           	}  
+				           	wx.stopSearchBeacons({
+							  	complete:function(res){
+								  	console.log('stop')
+								  	console.log(res)
+								  	console.log('stop')
+								    //关闭查找完成后的回调函数
+							  	}
+							});
+				        }  
+				    });  
+
+
+					/*
 					wx.invoke('openWXDeviceLib', {'connType':'lan'}, function(res) {
 						console.log(res);
 					});
@@ -66,9 +135,6 @@
 					//扫描前请先监听设备扫描事件
 					wx.on("onScanWXDeviceResult",function(res){
 						console.log(res);
-					    alert("扫描到1个设备");
-					    //自己解析一下res，里面会有deviceid,扫描设备的目的就是为了得到这个
-					    //然后就可以开始绑定了
 					});
 
 					//开始扫描
@@ -83,6 +149,7 @@
 					wx.invoke("stopScanWXDevice",{},function(res){
 						console.log(res)
 					});
+					*/
 
 				});
 
