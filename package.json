@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "pm2 start app.js -n mainServer --watch",
+    "stop": "pm2 stop mainServer"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
