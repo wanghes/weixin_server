@@ -42,7 +42,8 @@ app.use(expressJWT({
         '/wxsapApi/doLogin', 
         '/jssdk', 
         '/oauth', 
-        '/admin/',
+        '/admin',
+        '/map',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
     ],
     ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf']
@@ -52,6 +53,7 @@ app.use(expressJWT({
 // app.set('view engine', 'html');
 
 app.use('/admin', express.static('admin'));
+app.use('/map', express.static('map'));
 app.use('/', express.static('public'));
 
 
@@ -400,7 +402,7 @@ app.post('/api/getBeaconsByGroupId', (req,res) => {
     var result = jssdk.getBeaconsByGroupId(data);
     result.then(function(data) {
         res.send({
-            "code": 0,
+            "code": 0,  
             "message": "ok",
             "data": data
         });
