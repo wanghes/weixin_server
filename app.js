@@ -43,7 +43,7 @@ app.use(expressJWT({
         '/jssdk', 
         '/oauth', 
         '/admin',
-        '/map',
+        '/map/',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
     ],
     ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf']
