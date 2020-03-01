@@ -42,11 +42,11 @@ app.use(expressJWT({
         '/wxsapApi/doLogin', 
         '/jssdk', 
         '/oauth', 
-        '/admin',
+        '/admin/',
         '/map/',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
     ],
-    ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf']
+    ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf','.svg']
 }));
 
 // app.engine('html', ejs.__express);
