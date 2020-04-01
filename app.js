@@ -46,7 +46,7 @@ app.use(expressJWT({
         '/map/',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
     ],
-    ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf','.svg']
+    ext: ['.jpg', '.html', '.css', '.js', '.ico', '.woff', '.ttf','.svg','.jpg','.gif','.png','jpeg']
 }));
 
 // app.engine('html', ejs.__express);
