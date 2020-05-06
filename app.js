@@ -43,6 +43,7 @@ app.use(expressJWT({
         '/jssdk', 
         '/oauth', 
         '/admin/',
+        '/building/',
         '/map/',
         '/MP_verify_yYJFWLcuKfeZ0hFY.txt'
     ],
@@ -54,6 +55,7 @@ app.use(expressJWT({
 
 app.use('/admin', express.static('admin'));
 app.use('/map', express.static('map'));
+app.use('/building', express.static('building'));
 app.use('/', express.static('public'));
 
 
